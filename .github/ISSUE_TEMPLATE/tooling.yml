@@ -1,0 +1,19 @@
+name: Lỗi công cụ hoặc tài liệu
+description: Lỗi ở script tạo/xác minh gói, định dạng dữ liệu hoặc tài liệu
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: Điều gì xảy ra
+      description: Kèm lệnh đã chạy, kết quả nhận được và kết quả mong đợi.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Phiên bản dữ liệu hoặc commit
+  - type: input
+    id: node
+    attributes:
+      label: Phiên bản Node.js

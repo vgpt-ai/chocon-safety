@@ -1,0 +1,145 @@
+{
+  "license": "CC0-1.0",
+  "description": "Bộ ví dụ để kiểm một bản cài đặt độc lập của FORMAT.md. Tên miền ở đây là giả lập, không lấy từ dữ liệu upstream.",
+  "normalize": [
+    {
+      "input": " WWW.Example.COM. ",
+      "output": "www.example.com"
+    },
+    {
+      "input": "example.com",
+      "output": "example.com"
+    },
+    {
+      "input": "bücher.example",
+      "output": "xn--bcher-kva.example"
+    },
+    {
+      "input": "BÜCHER.example",
+      "output": "xn--bcher-kva.example"
+    },
+    {
+      "input": "a_b.example.com",
+      "output": "a_b.example.com"
+    },
+    {
+      "input": "localhost",
+      "output": null
+    },
+    {
+      "input": "",
+      "output": null
+    },
+    {
+      "input": "a..b",
+      "output": null
+    },
+    {
+      "input": "-a.com",
+      "output": null
+    },
+    {
+      "input": "a.com/x",
+      "output": null
+    },
+    {
+      "input": "*.a.com",
+      "output": null
+    },
+    {
+      "input": "exa mple.com",
+      "output": null
+    }
+  ],
+  "hash": [
+    {
+      "domain": "adult.example",
+      "hex": "3ffd04a48a3b362b"
+    },
+    {
+      "domain": "bet.example",
+      "hex": "2242344142fdcf6e"
+    },
+    {
+      "domain": "xn--bcher-kva.example",
+      "hex": "970ca6b73eaf2630"
+    }
+  ],
+  "bin": {
+    "sections": {
+      "1": [
+        "adult.example",
+        "video.adult.test",
+        "xn--bcher-kva.example"
+      ],
+      "2": [
+        "bet.example",
+        "casino.test"
+      ]
+    },
+    "sha256": "3be49818f2c32e187c4eb7b5ad7a71455e226f759e14ce1d10c3b2ed0c37800e",
+    "base64": "Q0hDTldTRDEAAQEIAAIAAAABAAAAAAADAAAAAAAAADAAAgAAAAAAAgAAAAAAAABIMhinxhsud0g//QSkijs2K5cMprc+ryYwIhVXriT37DoiQjRBQv3PbvFaKI6ieZszMsFmW0nA+GOGZxXyl+unFpFyByC8/QRa"
+  },
+  "lookup": [
+    {
+      "hostname": "adult.example",
+      "category": 1
+    },
+    {
+      "hostname": "www.adult.example",
+      "category": 1
+    },
+    {
+      "hostname": "WWW.ADULT.EXAMPLE.",
+      "category": 1
+    },
+    {
+      "hostname": "adult.test",
+      "category": 0
+    },
+    {
+      "hostname": "video.adult.test",
+      "category": 1
+    },
+    {
+      "hostname": "cdn.video.adult.test",
+      "category": 1
+    },
+    {
+      "hostname": "notadult.example",
+      "category": 0
+    },
+    {
+      "hostname": "bücher.example",
+      "category": 1
+    },
+    {
+      "hostname": "shop.bücher.example",
+      "category": 1
+    },
+    {
+      "hostname": "bet.example",
+      "category": 2
+    },
+    {
+      "hostname": "m.bet.example",
+      "category": 2
+    },
+    {
+      "hostname": "casino.test",
+      "category": 2
+    },
+    {
+      "hostname": "example",
+      "category": 0
+    },
+    {
+      "hostname": "school.example",
+      "category": 0
+    },
+    {
+      "hostname": "adult.example.org",
+      "category": 0
+    }
+  ]
+}

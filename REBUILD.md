@@ -20,6 +20,7 @@ Thành phần của gói nguồn:
 | `sources/upstream.json` | Repo, commit, URL và sha256 của từng file đầu vào |
 | `config/allowlist.txt` | Các mục Chocon loại khỏi bảng hash |
 | `config/sources.json` | Danh sách nào được dùng, ngưỡng kiểm tra |
+| `config/never-block.txt` | Tên miền dùng làm chốt chặn; không làm đổi bảng hash |
 | `scripts/`, `tests/` | Công cụ tạo và xác minh gói |
 | `build-info.json` | Phiên bản và thời điểm tạo của bản phát hành |
 
@@ -28,3 +29,7 @@ Thành phần của gói nguồn:
 ```bash
 node scripts/verify.mjs <thư-mục> --rebuild
 ```
+
+`--rebuild` chạy script nằm trong gói nguồn đã tải. Với bản có chữ ký hợp lệ,
+gói nguồn được ràng buộc với manifest đã ký. Không dùng `--allow-unsigned
+--rebuild` với file tải từ nơi không tin cậy.

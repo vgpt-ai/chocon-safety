@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import assert from 'node:assert/strict';
 import { generateKeyPairSync } from 'node:crypto';
+import fs from 'node:fs';
 import test from 'node:test';
 import { tarGzPack, tarGzUnpack, zipPack, zipUnpack } from '../scripts/lib/archive.mjs';
-import { assertSorted, buildBin, lookup, parseBin } from '../scripts/lib/bin.mjs';
+import { assertSorted, buildBin, hashDomain, lookup, parseBin } from '../scripts/lib/bin.mjs';
 import { hostnameSuffixes, normalizeHostname, parseDomainList } from '../scripts/lib/domains.mjs';
-import { openManifest, signManifest } from '../scripts/lib/manifest.mjs';
+import { openManifest, sha256Hex, signManifest } from '../scripts/lib/manifest.mjs';
 
 test('chuẩn hóa hostname', () => {
   assert.equal(normalizeHostname(' WWW.Example.COM. '), 'www.example.com');
@@ -38,6 +39,17 @@ test('bảng hash: tạo, đọc và tra cứu', () => {
   assert.equal(lookup(bin, parsed, 'notadult.example'), 0, 'chỉ khớp theo ranh giới nhãn');
   assert.equal(lookup(bin, parsed, 'example'), 0);
   assert.equal(bin.includes('adult'), false, 'không có tên miền dạng rõ');
+});
+
+test('bộ ví dụ tests/vectors.json khớp mã tham chiếu', () => {
+  const vectors = JSON.parse(fs.readFileSync(new URL('./vectors.json', import.meta.url), 'utf8'));
+  for (const { input, output } of vectors.normalize) assert.equal(normalizeHostname(input), output, JSON.stringify(input));
+  for (const { domain, hex } of vectors.hash) assert.equal(hashDomain(domain).toString('hex'), hex);
+  const { bin } = buildBin(Object.entries(vectors.bin.sections).map(([id, domains]) => ({ id: Number(id), domains: new Set(domains) })));
+  assert.equal(bin.toString('base64'), vectors.bin.base64);
+  assert.equal(sha256Hex(bin), vectors.bin.sha256);
+  const parsed = parseBin(bin);
+  for (const { hostname, category } of vectors.lookup) assert.equal(lookup(bin, parsed, hostname), category, hostname);
 });
 
 test('bảng hash: từ chối file hỏng', () => {

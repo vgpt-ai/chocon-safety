@@ -91,3 +91,12 @@ test('build dừng khi dữ liệu upstream bị hụt hoặc bị sửa', async
   await assert.rejects(build(options), /không khớp sha256/);
   await assert.rejects(build({ ...options, version: 'v1' }), /data-YYYYMMDD-NNN/);
 });
+
+test('build dừng khi một tên miền không được phép chặn bị khớp', async (t) => {
+  const f = fixture();
+  t.after(() => fs.rmSync(f.dir, { recursive: true, force: true }));
+  const options = { version: 'data-20260101-001', outDir: path.join(f.dir, 'dist'), sourcesDir: f.sources, config: f.config };
+  await assert.rejects(build({ ...options, neverBlock: new Set(['school.example', 'lop5.bet.example']) }), /never-block.txt: lop5.bet.example$/);
+  assert.equal(fs.existsSync(path.join(f.dir, 'dist/runtime.zip')), false);
+  assert.equal((await build({ ...options, neverBlock: new Set(['school.example']) })).changed, true);
+});

@@ -3,7 +3,7 @@ name: publish
 # Không có trigger pull_request: mã từ PR bên ngoài không bao giờ chạm khóa ký.
 on:
   schedule:
-    - cron: '23 19 * * 0' # 02:23 thứ Hai, giờ Việt Nam
+    - cron: '23 19 1 * *' # 02:23 ngày 2 hằng tháng, giờ Việt Nam
   workflow_dispatch:
     inputs:
       force:
@@ -22,6 +22,7 @@ jobs:
     environment: release
     permissions:
       contents: write
+      actions: write
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
@@ -31,6 +32,10 @@ jobs:
         with:
           node-version: 22
       - run: npm test
+      - name: Giữ lịch chạy
+        # GitHub tắt workflow chạy theo lịch sau 60 ngày repo không có hoạt động;
+        # bật lại qua API ở mỗi lần chạy để lịch hằng tháng không tự dừng.
+        run: gh workflow enable publish.yml
       - name: Chọn phiên bản
         id: version
         run: |
@@ -39,7 +44,12 @@ jobs:
           printf 'version=data-%s-%03d\n' "$day" "$((used + 1))" >> "$GITHUB_OUTPUT"
       - name: Lấy manifest của bản mới nhất
         run: |
-          curl -fsSL -o previous-manifest.json "https://github.com/${GH_REPO}/releases/latest/download/manifest.json" || : > previous-manifest.json
+          code="$(curl -sSL -o previous-manifest.json -w '%{http_code}' "https://github.com/${GH_REPO}/releases/latest/download/manifest.json")"
+          case "$code" in
+            200) ;;
+            404) : > previous-manifest.json ;;
+            *) echo "Không lấy được manifest của bản mới nhất (HTTP $code)" >&2; exit 1 ;;
+          esac
       - name: Tạo gói
         id: build
         env:
