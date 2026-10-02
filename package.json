@@ -1,8 +1,25 @@
 {
   "name": "chocon-safety",
+  "version": "1.0.0",
   "private": true,
-  "description": "Công cụ tạo gói hash an toàn web cho Chocon từ danh sách chặn HaGeZi NSFW và Gambling",
+  "description": "Hashed web-safety blocklist data for Chocon, built from HaGeZi's NSFW and Gambling lists, with signed releases and complete corresponding source",
+  "keywords": [
+    "blocklist",
+    "parental-controls",
+    "child-safety",
+    "web-filtering",
+    "hagezi"
+  ],
+  "homepage": "https://github.com/vgpt-ai/chocon-safety#readme",
+  "bugs": {
+    "url": "https://github.com/vgpt-ai/chocon-safety/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vgpt-ai/chocon-safety.git"
+  },
   "license": "GPL-3.0-only",
+  "author": "Chocon (https://chocon.net)",
   "type": "module",
   "engines": {
     "node": ">=22.2"

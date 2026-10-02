@@ -1,5 +1,9 @@
 # chocon-safety
 
+[![ci](https://github.com/vgpt-ai/chocon-safety/actions/workflows/ci.yml/badge.svg)](https://github.com/vgpt-ai/chocon-safety/actions/workflows/ci.yml)
+[![Bản mới nhất](https://img.shields.io/github/v/release/vgpt-ai/chocon-safety?label=d%E1%BB%AF%20li%E1%BB%87u)](https://github.com/vgpt-ai/chocon-safety/releases/latest)
+[![Giấy phép: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE)
+
 Dữ liệu an toàn web của [Chocon](https://chocon.net): gói hash dùng để nhận biết
 tên miền người lớn (NSFW) và cờ bạc (Gambling), cùng công cụ tạo và xác minh
 gói đó.
@@ -88,12 +92,14 @@ Hướng dẫn tạo lại từ gói nguồn của một bản cụ thể: [REBU
 không có trong repo. Việc ký và phát hành chỉ chạy trên nhánh `main`, theo lịch
 hoặc do người duy trì kích hoạt; pull request không chạy được bước này.
 
-## Báo chặn nhầm
+## Báo chặn nhầm, đóng góp và bảo mật
 
-Nếu một trang học tập hoặc trang phù hợp với trẻ bị chặn nhầm, hãy mở
-[issue](https://github.com/vgpt-ai/chocon-safety/issues) kèm tên miền. Lỗi thuộc
-về danh sách gốc cũng nên được báo cho
-[HaGeZi](https://github.com/hagezi/dns-blocklists/issues).
+- Trang học tập hoặc trang phù hợp với trẻ bị chặn nhầm: mở
+  [issue "Chặn nhầm"](https://github.com/vgpt-ai/chocon-safety/issues/new/choose).
+  Lỗi thuộc về danh sách gốc cũng nên được báo cho
+  [HaGeZi](https://github.com/hagezi/dns-blocklists/issues).
+- Sửa công cụ hoặc tài liệu: xem [CONTRIBUTING.md](CONTRIBUTING.md).
+- Lỗ hổng bảo mật: báo riêng theo [SECURITY.md](SECURITY.md).
 
 ## Cấu trúc repo
 

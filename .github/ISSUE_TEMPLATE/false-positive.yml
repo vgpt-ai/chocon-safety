@@ -1,0 +1,25 @@
+name: Chặn nhầm
+description: Một trang phù hợp với trẻ bị nhận là người lớn hoặc cờ bạc
+labels: [false-positive]
+body:
+  - type: input
+    id: domain
+    attributes:
+      label: Tên miền
+      description: Chỉ ghi tên miền, không kèm đường dẫn.
+      placeholder: example.edu.vn
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Phiên bản dữ liệu
+      description: Tag của bản phát hành, nếu biết.
+      placeholder: data-20261002-001
+  - type: textarea
+    id: reason
+    attributes:
+      label: Vì sao đây là chặn nhầm
+      description: Trang này cung cấp nội dung gì và ai sử dụng.
+    validations:
+      required: true

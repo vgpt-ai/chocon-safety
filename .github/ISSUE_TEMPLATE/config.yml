@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Bỏ sót một trang người lớn hoặc cờ bạc
+    url: https://github.com/hagezi/dns-blocklists/issues
+    about: Dữ liệu tên miền đến từ HaGeZi; hãy báo trang còn thiếu ở danh sách gốc.
+  - name: Báo lỗ hổng bảo mật
+    url: https://github.com/vgpt-ai/chocon-safety/security/advisories/new
+    about: Báo riêng, không mở issue công khai.

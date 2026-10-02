@@ -17,7 +17,7 @@ const VERSION_PATTERN = /^data-\d{8}-\d{3}$/;
 const MAX_SOURCE_BYTES = 64 * 1024 * 1024;
 const MAX_REJECTED_RATIO = 0.01;
 // Nội dung repo đi kèm gói nguồn tương ứng, để người nhận tự tạo lại gói hash.
-const SOURCE_TREE = ['README.md', 'LICENSE', 'NOTICE.md', 'FORMAT.md', 'REBUILD.md', 'package.json', 'config', 'keys', 'scripts', 'tests', '.github'];
+const SOURCE_TREE = ['README.md', 'LICENSE', 'NOTICE.md', 'FORMAT.md', 'REBUILD.md', 'CONTRIBUTING.md', 'SECURITY.md', 'package.json', 'config', 'keys', 'scripts', 'tests', '.github'];
 
 export function loadConfig(root = ROOT) {
   return JSON.parse(fs.readFileSync(path.join(root, 'config/sources.json'), 'utf8'));
