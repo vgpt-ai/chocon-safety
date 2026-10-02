@@ -27,6 +27,7 @@ HaGeZi phát hành các danh sách này theo **GNU GPL phiên bản 3**. Gói ha
 chuyển đổi của dữ liệu đó, nên được phát hành theo cùng giấy phép và luôn đi kèm
 nguồn tương ứng. Công cụ trong repo này cũng theo GNU GPL phiên bản 3
 ([LICENSE](LICENSE)). Chi tiết về nguồn gốc và các thay đổi: [NOTICE.md](NOTICE.md).
+Cách từng nghĩa vụ của giấy phép được đáp ứng: [COMPLIANCE.md](COMPLIANCE.md).
 
 ## Tải ở đâu
 

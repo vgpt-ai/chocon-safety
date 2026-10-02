@@ -1,4 +1,5 @@
 {
+  "license": "CC0-1.0",
   "description": "Bộ ví dụ để kiểm một bản cài đặt độc lập của FORMAT.md. Tên miền ở đây là giả lập, không lấy từ dữ liệu upstream.",
   "normalize": [
     {

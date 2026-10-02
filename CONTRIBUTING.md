@@ -25,4 +25,5 @@ Pull request không chạy bước ký và phát hành; việc đó chỉ diễn
 ## Giấy phép
 
 Đóng góp của bạn được phát hành theo GNU GPL phiên bản 3, giống phần còn lại
-của repo ([LICENSE](LICENSE)).
+của repo ([LICENSE](LICENSE)). Riêng đóng góp vào `FORMAT.md` và
+`tests/vectors.json` được phát hành theo CC0 1.0.

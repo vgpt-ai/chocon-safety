@@ -17,7 +17,7 @@ const VERSION_PATTERN = /^data-\d{8}-\d{3}$/;
 const MAX_SOURCE_BYTES = 64 * 1024 * 1024;
 const MAX_REJECTED_RATIO = 0.01;
 // Nội dung repo đi kèm gói nguồn tương ứng, để người nhận tự tạo lại gói hash.
-const SOURCE_TREE = ['README.md', 'LICENSE', 'NOTICE.md', 'FORMAT.md', 'REBUILD.md', 'CONTRIBUTING.md', 'SECURITY.md', 'package.json', 'config', 'keys', 'scripts', 'tests', '.github'];
+const SOURCE_TREE = ['README.md', 'LICENSE', 'NOTICE.md', 'FORMAT.md', 'REBUILD.md', 'COMPLIANCE.md', 'CONTRIBUTING.md', 'SECURITY.md', 'package.json', 'config', 'keys', 'scripts', 'tests', '.github'];
 
 export function loadConfig(root = ROOT) {
   return JSON.parse(fs.readFileSync(path.join(root, 'config/sources.json'), 'utf8'));
@@ -98,15 +98,19 @@ function walk(root, relative, out) {
   }
 }
 
-function sourceNotice({ version, repository, upstream }) {
+function sourceNotice({ version, createdAt, repository, upstream }) {
   return [
     '# Nguồn tương ứng của gói này',
     '',
     `Phiên bản dữ liệu: ${version}`,
+    `Ngày chuyển đổi: ${createdAt}`,
     '',
-    'File `web-safety.bin` trong gói này là bảng hash được tạo từ danh sách chặn',
-    `NSFW và Gambling của HaGeZi (https://github.com/${upstream.repository}, commit`,
-    `${upstream.commit}), phát hành theo GNU GPL phiên bản 3 (xem LICENSE).`,
+    'File `web-safety.bin` trong gói này là bản đã sửa đổi (chuyển sang bảng hash)',
+    'của danh sách chặn NSFW và Gambling thuộc dự án HaGeZi DNS Blocklists',
+    `(https://github.com/${upstream.repository}, commit`,
+    `${upstream.commit}). Chocon thực hiện việc chuyển đổi`,
+    'vào ngày nêu trên; chi tiết thay đổi ở NOTICE.md. Gói này được phát hành theo',
+    'GNU General Public License phiên bản 3 (xem LICENSE), không kèm bảo hành.',
     '',
     'Nguồn tương ứng đầy đủ của đúng phiên bản này (dữ liệu đầu vào, các điều',
     'chỉnh, script và hướng dẫn tạo lại) được cung cấp tại cùng nơi phát hành:',
@@ -187,7 +191,7 @@ export async function build({
     { name: 'web-safety.bin', data: bin },
     { name: 'LICENSE', data: read('LICENSE') },
     { name: 'NOTICE.md', data: read('NOTICE.md') },
-    { name: 'SOURCE.md', data: Buffer.from(sourceNotice({ version, repository, upstream }), 'utf8') },
+    { name: 'SOURCE.md', data: Buffer.from(sourceNotice({ version, createdAt, repository, upstream }), 'utf8') },
   ]);
 
   const tree = [];

@@ -3,6 +3,10 @@
 Tài liệu này mô tả `manifest.json`, `runtime.zip`, `web-safety.bin` và quy trình
 mà một ứng dụng (Chocon Desktop, backend) dùng để cập nhật và tra cứu.
 
+Giấy phép của tài liệu này và của `tests/vectors.json`: CC0 1.0. Ai cũng có thể
+dùng chúng để viết bộ đọc độc lập theo bất kỳ giấy phép nào. Mã trong `scripts/`
+và gói dữ liệu vẫn theo GNU GPL phiên bản 3.
+
 ## 1. Các file của một bản phát hành
 
 Tag có dạng `data-YYYYMMDD-NNN` (ngày theo UTC, số thứ tự trong ngày).
