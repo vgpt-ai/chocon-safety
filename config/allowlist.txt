@@ -1,0 +1,3 @@
+# Điều chỉnh của Chocon: các mục bị loại khỏi bảng hash vì chặn nhầm.
+# Mỗi dòng là đúng một mục có trong danh sách upstream (không phải tên miền con
+# của mục đó). Mỗi dòng thêm vào cần kèm chú thích lý do ở dòng phía trên.

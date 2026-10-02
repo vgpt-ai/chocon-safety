@@ -1,0 +1,15 @@
+{
+  "name": "chocon-safety",
+  "private": true,
+  "description": "Công cụ tạo gói hash an toàn web cho Chocon từ danh sách chặn HaGeZi NSFW và Gambling",
+  "license": "GPL-3.0-only",
+  "type": "module",
+  "engines": {
+    "node": ">=22.2"
+  },
+  "scripts": {
+    "test": "node --test",
+    "build": "node scripts/build.mjs",
+    "verify": "node scripts/verify.mjs"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "upstream": {
+    "repository": "hagezi/dns-blocklists",
+    "branch": "main",
+    "license": "GPL-3.0",
+    "licensePath": "LICENSE"
+  },
+  "categories": [
+    { "id": 1, "name": "nsfw", "path": "wildcard/nsfw-onlydomains.txt", "minEntries": 40000 },
+    { "id": 2, "name": "gambling", "path": "wildcard/gambling-onlydomains.txt", "minEntries": 250000 }
+  ],
+  "distribution": {
+    "repository": "vgpt-ai/chocon-safety"
+  }
+}

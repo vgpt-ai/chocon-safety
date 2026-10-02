@@ -1,0 +1,60 @@
+name: publish
+# Chỉ chạy theo lịch hoặc do người có quyền ghi kích hoạt, trên mã đã vào main.
+# Không có trigger pull_request: mã từ PR bên ngoài không bao giờ chạm khóa ký.
+on:
+  schedule:
+    - cron: '23 19 * * 0' # 02:23 thứ Hai, giờ Việt Nam
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Phát hành cả khi bảng hash không đổi
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: publish
+  cancel-in-progress: false
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main' && github.repository == 'vgpt-ai/chocon-safety'
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - run: npm test
+      - name: Chọn phiên bản
+        id: version
+        run: |
+          day="$(date -u +%Y%m%d)"
+          used="$(gh release list --limit 200 --json tagName --jq "[.[] | select(.tagName | startswith(\"data-${day}-\"))] | length")"
+          printf 'version=data-%s-%03d\n' "$day" "$((used + 1))" >> "$GITHUB_OUTPUT"
+      - name: Lấy manifest của bản mới nhất
+        run: |
+          curl -fsSL -o previous-manifest.json "https://github.com/${GH_REPO}/releases/latest/download/manifest.json" || : > previous-manifest.json
+      - name: Tạo gói
+        id: build
+        env:
+          WEB_SAFETY_SIGNING_KEY: ${{ secrets.WEB_SAFETY_SIGNING_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+          FORCE: ${{ inputs.force && '--force' || '' }}
+        run: node scripts/build.mjs --version "${{ steps.version.outputs.version }}" --previous-manifest previous-manifest.json $FORCE
+      - name: Xác minh và tạo lại từ gói nguồn
+        if: steps.build.outputs.changed == 'true'
+        run: node scripts/verify.mjs dist --expect-version "${{ steps.version.outputs.version }}" --rebuild
+      - name: Phát hành
+        if: steps.build.outputs.changed == 'true'
+        run: |
+          version="${{ steps.version.outputs.version }}"
+          node scripts/release-notes.mjs dist > release-notes.md
+          gh release create "$version" --draft --target "$GITHUB_SHA" --title "$version" --notes-file release-notes.md \
+            dist/manifest.json dist/runtime.zip dist/corresponding-source.tar.gz
+          gh release edit "$version" --draft=false --latest

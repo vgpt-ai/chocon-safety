@@ -1,0 +1,5 @@
+dist/
+node_modules/
+*.private.pem
+*.pem.bak
+.DS_Store
