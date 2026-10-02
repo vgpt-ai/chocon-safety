@@ -1,0 +1,49 @@
+# Chốt chặn trước khi phát hành: các tên miền dưới đây không bao giờ được khớp
+# bảng hash. Nếu dữ liệu upstream khiến một tên miền ở đây (hoặc tên miền cha
+# của nó) bị chặn, build dừng và không có bản nào được phát hành.
+# Danh sách này không làm thay đổi bảng hash.
+
+# Chocon
+chocon.net
+dev.chocon.net
+
+# Tìm kiếm và tra cứu
+google.com
+www.google.com
+bing.com
+duckduckgo.com
+wikipedia.org
+vi.wikipedia.org
+en.wikipedia.org
+
+# Học tập
+khanacademy.org
+vi.khanacademy.org
+code.org
+scratch.mit.edu
+duolingo.com
+olm.vn
+hocmai.vn
+vioedu.vn
+violympic.vn
+k12online.vn
+vnedu.vn
+moet.gov.vn
+youtube.com
+www.youtube.com
+youtubekids.com
+chess.com
+lichess.org
+
+# Lớp học trực tuyến
+zoom.us
+meet.google.com
+classroom.google.com
+teams.microsoft.com
+microsoft.com
+office.com
+
+# Nơi tải dữ liệu và bản cập nhật
+github.com
+objects.githubusercontent.com
+release-assets.githubusercontent.com

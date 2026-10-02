@@ -54,7 +54,9 @@ Mọi bản phát hành nằm tại
 
 1. Tải hai danh sách và giấy phép của HaGeZi tại **một commit cố định**.
 2. Chuẩn hóa từng tên miền (chữ thường, punycode), bỏ dòng không hợp lệ, loại
-   các mục trong [config/allowlist.txt](config/allowlist.txt).
+   các mục trong [config/allowlist.txt](config/allowlist.txt). Build dừng nếu
+   danh sách bị hụt bất thường hoặc nếu một tên miền trong
+   [config/never-block.txt](config/never-block.txt) bị chặn.
 3. Thay mỗi tên miền bằng 8 byte đầu của SHA-256, sắp xếp theo từng danh mục và
    ghi vào `web-safety.bin`.
 4. Đóng gói `runtime.zip` và `corresponding-source.tar.gz`, ghi checksum vào
@@ -104,7 +106,7 @@ hoặc do người duy trì kích hoạt; pull request không chạy được b�
 ## Cấu trúc repo
 
 ```text
-config/     Danh sách upstream được dùng, ngưỡng kiểm tra, allowlist
+config/     Danh sách upstream được dùng, ngưỡng kiểm tra, allowlist, never-block
 keys/       Khóa công khai xác minh manifest
 scripts/    build.mjs, verify.mjs, release-notes.mjs và thư viện dùng chung
 tests/      Test của công cụ

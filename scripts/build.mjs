@@ -8,7 +8,7 @@ import process from 'node:process';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import { tarGzPack, zipPack } from './lib/archive.mjs';
-import { FORMAT_VERSION, buildBin } from './lib/bin.mjs';
+import { FORMAT_VERSION, buildBin, lookup, parseBin } from './lib/bin.mjs';
 import { normalizeHostname, parseDomainList } from './lib/domains.mjs';
 import { MANIFEST_SCHEMA_VERSION, openManifest, sha256Hex, signManifest } from './lib/manifest.mjs';
 
@@ -75,17 +75,17 @@ function readSources(config, sourcesDir) {
   return { upstream, data };
 }
 
-function readAllowlist(root) {
-  const text = fs.readFileSync(path.join(root, 'config/allowlist.txt'), 'utf8');
-  const allow = new Set();
+function readHostList(root, file) {
+  const text = fs.readFileSync(path.join(root, file), 'utf8');
+  const hosts = new Set();
   for (const raw of text.split('\n')) {
     const line = raw.trim();
     if (!line || line.startsWith('#')) continue;
     const host = normalizeHostname(line);
-    if (!host) throw new Error(`config/allowlist.txt có dòng không hợp lệ: ${line}`);
-    allow.add(host);
+    if (!host) throw new Error(`${file} có dòng không hợp lệ: ${line}`);
+    hosts.add(host);
   }
-  return allow;
+  return hosts;
 }
 
 function walk(root, relative, out) {
@@ -133,6 +133,7 @@ export async function build({
   force = false,
   root = ROOT,
   config = loadConfig(root),
+  neverBlock = readHostList(root, 'config/never-block.txt'),
 }) {
   if (!VERSION_PATTERN.test(version)) throw new Error(`Phiên bản phải có dạng data-YYYYMMDD-NNN: ${version}`);
   fs.mkdirSync(outDir, { recursive: true });
@@ -146,7 +147,7 @@ export async function build({
   }
   const { upstream, data } = readSources(config, sources);
 
-  const allowlist = readAllowlist(root);
+  const allowlist = readHostList(root, 'config/allowlist.txt');
   const sections = [];
   const categories = [];
   for (const category of config.categories) {
@@ -166,6 +167,12 @@ export async function build({
   const { bin, counts } = buildBin(sections);
   for (const category of categories) category.entries = counts.find((count) => count.id === category.id).entries;
   const binSha256 = sha256Hex(bin);
+
+  const parsedBin = parseBin(bin);
+  const wronglyBlocked = [...neverBlock].filter((host) => lookup(bin, parsedBin, host) !== 0);
+  if (wronglyBlocked.length > 0) {
+    throw new Error(`Dữ liệu upstream chặn tên miền trong config/never-block.txt: ${wronglyBlocked.join(', ')}`);
+  }
 
   if (previousManifestText && !force) {
     const previous = openManifest(previousManifestText, { allowUnsigned: true }).payload;
