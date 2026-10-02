@@ -62,8 +62,8 @@ Mọi bản phát hành nằm tại
 5. Trước khi phát hành, giải nén gói nguồn và tạo lại `runtime.zip` từ đó; hai
    bản phải trùng từng byte.
 
-Bản mới chỉ được phát hành khi bảng hash thực sự thay đổi. Lịch kiểm tra hiện
-tại là mỗi tuần một lần.
+Bản mới được tạo khoảng mỗi tháng một lần và chỉ được phát hành khi bảng hash
+thực sự thay đổi. Chocon không chạy theo dữ liệu mới nhất của upstream.
 
 Định dạng file, cách tra cứu và quy trình cập nhật cho ứng dụng: [FORMAT.md](FORMAT.md).
 
