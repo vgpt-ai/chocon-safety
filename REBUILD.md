@@ -29,3 +29,7 @@ Thành phần của gói nguồn:
 ```bash
 node scripts/verify.mjs <thư-mục> --rebuild
 ```
+
+`--rebuild` chạy script nằm trong gói nguồn đã tải. Với bản có chữ ký hợp lệ,
+gói nguồn được ràng buộc với manifest đã ký. Không dùng `--allow-unsigned
+--rebuild` với file tải từ nơi không tin cậy.

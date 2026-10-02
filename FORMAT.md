@@ -28,6 +28,9 @@ Tag có dạng `data-YYYYMMDD-NNN` (ngày theo UTC, số thứ tự trong ngày)
   UTF-8 của chuỗi này; phải xác minh chữ ký trước rồi mới `JSON.parse(payload)`.
 - `keyId` là 16 ký tự hex đầu của SHA-256 trên khóa công khai dạng SPKI DER, chỉ
   để chọn khóa. Khóa dùng để xác minh phải là khóa đã đóng sẵn trong ứng dụng.
+- Ứng dụng nên đóng sẵn được **một danh sách** khóa công khai và chấp nhận chữ ký
+  khớp bất kỳ khóa nào trong đó, để có thể đổi khóa ký bằng một bản cập nhật ứng
+  dụng mà không gián đoạn.
 
 Các trường của payload:
 
@@ -76,7 +79,11 @@ Hash của một tên miền = 8 byte đầu của `SHA-256(tên miền đã chu
 
 1. Chuẩn hóa: bỏ khoảng trắng, đổi sang chữ thường, bỏ dấu chấm cuối, chuyển
    tên miền quốc tế sang punycode. Hostname chỉ có một nhãn hoặc không hợp lệ
-   thì coi là không khớp.
+   thì coi là không khớp. Mỗi nhãn dài 1–63 ký tự, chỉ gồm `a-z`, `0-9`, `-`,
+   `_`, không bắt đầu hay kết thúc bằng `-`; cả hostname không quá 253 ký tự.
+   Nên lấy hostname từ bộ phân tích URL chuẩn WHATWG (ví dụ `new URL(u).hostname`),
+   vốn đã trả về dạng punycode chữ thường; cách chuyển punycode cũ hơn (IDNA 2003)
+   có thể cho kết quả khác ở một số ký tự.
 2. Lấy hostname và mọi tên miền cha theo ranh giới nhãn, tới khi còn hai nhãn.
    Ví dụ `a.b.example.com` → `a.b.example.com`, `b.example.com`, `example.com`.
 3. Tính hash từng chuỗi và tìm trong từng section. Khớp ở đâu thì hostname thuộc
@@ -89,6 +96,10 @@ nhầm vào khoảng 4 × 10⁻¹⁴.
 Mã tham chiếu: `scripts/lib/bin.mjs` (`parseBin`, `lookup`) và
 `scripts/lib/domains.mjs` (`normalizeHostname`).
 
+`tests/vectors.json` là bộ ví dụ (chuẩn hóa, hash, một file bin nhỏ và kết quả
+tra cứu mong đợi) để kiểm một bản cài đặt độc lập bằng ngôn ngữ khác. Tên miền
+trong đó là giả lập.
+
 ## 5. Quy trình cập nhật cho ứng dụng
 
 ```text
@@ -100,10 +111,15 @@ https://github.com/vgpt-ai/chocon-safety/releases/download/<tag>/runtime.zip
 ```
 
 1. Khởi động bằng bản hợp lệ đã lưu trên máy.
-2. Khoảng một lần mỗi ngày, có giãn ngẫu nhiên, tải `manifest.json`.
+2. Không thường hơn một lần mỗi ngày, có giãn ngẫu nhiên giữa các máy, tải
+   `manifest.json` (khoảng 2 KB). Bản mới được phát hành khoảng mỗi tháng một
+   lần, nên kiểm mỗi tuần một lần là đủ.
 3. Xác minh chữ ký bằng khóa công khai đóng sẵn; kiểm `schemaVersion` và
    `format.version`.
-4. Nếu `runtime.bin.sha256` trùng bản đang dùng thì dừng, không tải gì thêm.
+4. Nếu `version` không lớn hơn phiên bản đang dùng (so sánh chuỗi; tag có dạng
+   `data-YYYYMMDD-NNN` nên thứ tự chuỗi là thứ tự thời gian) thì dừng. Bước này
+   chặn việc bị đưa về một bản cũ có chữ ký hợp lệ. Nếu `runtime.bin.sha256`
+   trùng bản đang dùng thì chỉ ghi nhận phiên bản mới, không tải gì thêm.
 5. Tải `runtime.url`; từ chối nếu vượt `runtime.size`; kiểm `runtime.sha256`.
 6. Lấy `web-safety.bin` trong ZIP; kiểm `runtime.bin.sha256`, magic, bảng
    section và 32 byte toàn vẹn cuối file.
@@ -118,5 +134,6 @@ Không cần token GitHub và không dùng GitHub REST API.
 | Tải bị gián đoạn | Không thay bản đang dùng bằng file chưa hoàn chỉnh |
 | Chưa từng có bản hợp lệ | Báo trạng thái đang chuẩn bị; không coi danh sách chặn là rỗng |
 
-Ứng dụng nên giới thiệu kèm `LICENSE`, `NOTICE.md` và `SOURCE.md` trong
-`runtime.zip` ở mục giấy phép dữ liệu của mình.
+Ứng dụng phải giữ `LICENSE`, `NOTICE.md` và `SOURCE.md` trong `runtime.zip`
+cùng với bảng hash và hiển thị chúng ở mục giấy phép dữ liệu của mình; xem
+[COMPLIANCE.md](COMPLIANCE.md).
